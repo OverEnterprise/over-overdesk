@@ -3734,6 +3734,16 @@ Widget loadPowered(BuildContext context) {
   if (bind.mainGetBuildinOption(key: "hide-powered-by-me") == 'Y') {
     return SizedBox.shrink();
   }
+  if (bind.mainGetAppNameSync() == 'OverDesk') {
+    return Opacity(
+      opacity: 0.5,
+      child: Text(
+        'Desenvolvido por Over Enterprise LTDA.',
+        overflow: TextOverflow.clip,
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 9),
+      ),
+    ).marginOnly(top: 6);
+  }
   return MouseRegion(
     cursor: SystemMouseCursors.click,
     child: GestureDetector(

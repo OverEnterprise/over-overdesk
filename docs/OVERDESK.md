@@ -7,6 +7,8 @@ As permissoes da janela de aceitacao nao podem ser alteradas.
 O modo de aprovacao e `click`, como no JSON do RdGen. Nenhuma senha permanente
 e incorporada ao executavel. O Sobre omite website, privacidade e slogan;
 seu rodape mostra somente `Copyright © 2026 Over Enterprise LTDA.`.
+A identificacao na tela principal e `Desenvolvido por Over Enterprise LTDA.`,
+sem link para o website do RustDesk.
 Os avisos de autoria do upstream e a licenca acompanham o pacote em arquivos.
 
 O servidor continua sendo o RustDesk Server OSS. Nao ha API de contas:
@@ -16,6 +18,9 @@ O perfil usa TCP/UDP nativos, limpa proxy anteriormente salvo e desativa
 WebSocket. Mantem TCP punch habilitado; os recursos opcionais UDP punch,
 IPv6 punch e WebRTC ficam desabilitados, como no padrao de servidor proprio
 do cliente. Isso nao desativa o UDP nativo da porta 21116.
+Os controles de TCP punch, UDP punch, IPv6 P2P e WebRTC P2P tambem ficam
+ocultos em Geral > Outro, pois seus valores ja estao fixos no perfil.
+As demais preferencias locais de sessao, captura e renderizacao permanecem.
 
 ## Primeira compilacao pelo GitHub Actions
 
@@ -91,8 +96,12 @@ nome do EXE seguem o codigo original. Com a feature, `src/common.rs` e
 `src/platform/windows.rs` usa esse perfil em vez de configuracao no nome do EXE.
 Isso evita mudar de servidor ao renomear o executavel. A tela desktop Sobre
 omite links, licenca textual e slogan do rodape quando o nome do aplicativo e
-OverDesk, exibindo o copyright da Over Enterprise. `src/overdesk.rs` fixa as
-permissoes e a rede e limpa proxy salvo, necessario porque a aba foi removida.
+OverDesk, exibindo o copyright da Over Enterprise.
+`flutter/lib/desktop/pages/desktop_setting_page.dart` tambem omite os quatro
+controles de rede em Geral > Outro no OverDesk. `flutter/lib/common.dart` muda
+a autoria nas telas principal e mobile apenas no OverDesk, preservando o texto
+e link originais nos demais clientes. `src/overdesk.rs` fixa as permissoes e a
+rede e limpa proxy salvo, necessario porque a aba foi removida.
 `libs/portable/Cargo.toml`, `build.rs` e `src/ui.rs` habilitam os recursos visuais
 do empacotador somente com sua feature `overdesk`. O fluxo de extracao original
 nao foi alterado. Nenhum protocolo,

@@ -613,7 +613,9 @@ class _GeneralState extends State<_General> {
           'Capture screen using DirectX',
           kOptionDirectxCapture,
         ),
-      if (!isWeb && !incomingOnly) ...[
+      if (!isWeb &&
+          !incomingOnly &&
+          bind.mainGetAppNameSync() != 'OverDesk') ...[
         _OptionCheckBox(
           context,
           'Enable TCP hole punching',
@@ -633,7 +635,8 @@ class _GeneralState extends State<_General> {
           isServer: false,
         ),
       ],
-      if (!incomingOnly) ...webrtcOptions(context),
+      if (!incomingOnly && bind.mainGetAppNameSync() != 'OverDesk')
+        ...webrtcOptions(context),
       if (!isWeb && !incomingOnly)
         Tooltip(
           message: translate('sync-clipboard-between-sessions-tip'),
