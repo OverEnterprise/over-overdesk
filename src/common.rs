@@ -2454,6 +2454,12 @@ pub fn rustdesk_interval(i: Interval) -> ThrottledInterval {
     ThrottledInterval::new(i)
 }
 
+#[cfg(feature = "overdesk")]
+pub fn load_custom_client() {
+    crate::overdesk::init();
+}
+
+#[cfg(not(feature = "overdesk"))]
 pub fn load_custom_client() {
     #[cfg(debug_assertions)]
     if let Ok(data) = std::fs::read_to_string("./custom.txt") {
