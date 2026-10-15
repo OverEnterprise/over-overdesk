@@ -96,7 +96,10 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'vcpkg install failed' }
 
       - name: Build OverDesk
-        run: ./res/overdesk/build.ps1
+        run: |
+          python -m pip install -r libs/portable/requirements.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Portable packer dependencies failed' }
+          ./res/overdesk/build.ps1
 
       - name: Test the OverDesk server and account configuration
         run: |
@@ -107,4 +110,4 @@ jobs:
         with:
           name: OverDesk-windows-x64
           if-no-files-found: error
-          path: flutter/build/windows/x64/runner/Release/
+          path: target/OverDesk.exe

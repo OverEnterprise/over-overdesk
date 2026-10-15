@@ -2570,6 +2570,7 @@ class _AboutState extends State<_About> {
       final buildDate = data['buildDate'].toString();
       final fingerprint = data['fingerprint'].toString();
       final myId = data['myId'].toString();
+      final isOverDesk = bind.mainGetAppNameSync() == 'OverDesk';
       const linkStyle = TextStyle(decoration: TextDecoration.underline);
       final scrollController = ScrollController();
       return SingleChildScrollView(
@@ -2594,7 +2595,8 @@ class _AboutState extends State<_About> {
               SelectionArea(
                   child: Text('${translate('ID')}: $myId')
                       .marginSymmetric(vertical: 4.0)),
-              InkWell(
+              if (!isOverDesk)
+                InkWell(
                   onTap: () {
                     launchUrlString('https://rustdesk.com/privacy.html');
                   },
@@ -2602,7 +2604,8 @@ class _AboutState extends State<_About> {
                     translate('Privacy Statement'),
                     style: linkStyle,
                   ).marginSymmetric(vertical: 4.0)),
-              InkWell(
+              if (!isOverDesk)
+                InkWell(
                   onTap: () {
                     launchUrlString('https://rustdesk.com');
                   },
@@ -2622,10 +2625,12 @@ class _AboutState extends State<_About> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Copyright © ${DateTime.now().toString().substring(0, 4)} Purslane Tech Pte. Ltd.\n$license',
+                            isOverDesk
+                                ? 'Copyright © 2026 Over Enterprise LTDA.'
+                                : 'Copyright © ${DateTime.now().toString().substring(0, 4)} Purslane Tech Pte. Ltd.\n$license',
                             style: const TextStyle(color: Colors.white),
                           ),
-                          if (bind.mainGetAppNameSync() != 'OverDesk')
+                          if (!isOverDesk)
                             Text(
                               translate('Slogan_tip'),
                               style: TextStyle(

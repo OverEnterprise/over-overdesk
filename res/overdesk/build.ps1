@@ -47,6 +47,13 @@ try {
     if (-not $env:VCPKG_ROOT) {
         throw 'Configure VCPKG_ROOT conforme docs/OVERDESK.md.'
     }
+    & python -c 'import brotli'
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Instale a dependencia do empacotador: python -m pip install -r libs/portable/requirements.txt'
+    }
+    foreach ($asset in @('logo.png', 'icon.png', 'icon.ico')) {
+        Copy-Item -LiteralPath (Join-Path $PSScriptRoot $asset) -Destination (Join-Path 'flutter/assets' $asset) -Force
+    }
 
     if ($UiOnly) {
         if (-not (Test-Path -LiteralPath 'target/release/librustdesk.dll')) {
@@ -68,8 +75,15 @@ try {
 
     $bundle = Join-Path $repoRoot 'flutter/build/windows/x64/runner/Release'
     Copy-Item -LiteralPath (Join-Path $bundle 'rustdesk.exe') -Destination (Join-Path $bundle 'OverDesk.exe') -Force
-    Write-Host "OverDesk: $bundle\OverDesk.exe"
-    Write-Host 'Distribua a pasta Release completa. O EXE depende das DLLs e da pasta data.'
+    Copy-Item -LiteralPath 'LICENCE' -Destination (Join-Path $bundle 'LICENSE-RustDesk.txt') -Force
+    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'NOTICE.txt') -Destination $bundle -Force
+    & python res/overdesk/package.py
+    if ($LASTEXITCODE -ne 0) { throw 'Falha ao comprimir o pacote portatil.' }
+    & cargo build --locked --release -p rustdesk-portable-packer --features overdesk --target-dir target/overdesk-portable
+    if ($LASTEXITCODE -ne 0) { throw 'Falha ao compilar o executavel portatil.' }
+    Copy-Item -LiteralPath 'target/overdesk-portable/release/rustdesk-portable-packer.exe' -Destination 'target/OverDesk.exe' -Force
+    Write-Host "OverDesk: $repoRoot\target\OverDesk.exe"
+    Write-Host 'Distribua apenas esse EXE. Os arquivos internos sao extraidos automaticamente ao executar.'
 } finally {
     Pop-Location
 }
