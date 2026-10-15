@@ -59,21 +59,22 @@ try {
         if (-not (Test-Path -LiteralPath 'target/release/librustdesk.dll')) {
             throw 'Execute primeiro o build completo do OverDesk, sem -UiOnly.'
         }
-        Push-Location flutter
-        try {
-            & flutter build windows --release
-            if ($LASTEXITCODE -ne 0) { throw 'Falha ao compilar a interface Flutter.' }
-        } finally {
-            Pop-Location
-        }
     } else {
         & cargo build --locked --features flutter,hwcodec,vram,overdesk --lib --release
         if ($LASTEXITCODE -ne 0) { throw 'Falha ao compilar o Rust do OverDesk.' }
-        & python build.py --flutter --hwcodec --vram --skip-cargo --skip-portable-pack
-        if ($LASTEXITCODE -ne 0) { throw 'Falha ao compilar o aplicativo Windows.' }
+    }
+    Push-Location flutter
+    try {
+        & flutter build windows --release --dart-define=OVERDESK=true
+        if ($LASTEXITCODE -ne 0) { throw 'Falha ao compilar a interface Flutter.' }
+    } finally {
+        Pop-Location
     }
 
     $bundle = Join-Path $repoRoot 'flutter/build/windows/x64/runner/Release'
+    if (-not $UiOnly) {
+        Copy-Item -LiteralPath 'target/release/deps/dylib_virtual_display.dll' -Destination $bundle -Force
+    }
     Copy-Item -LiteralPath (Join-Path $bundle 'rustdesk.exe') -Destination (Join-Path $bundle 'OverDesk.exe') -Force
     Copy-Item -LiteralPath 'LICENCE' -Destination (Join-Path $bundle 'LICENSE-RustDesk.txt') -Force
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'NOTICE.txt') -Destination $bundle -Force

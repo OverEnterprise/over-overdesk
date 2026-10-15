@@ -11,6 +11,13 @@ A identificacao na tela principal e `Desenvolvido por Over Enterprise LTDA.`,
 sem link para o website do RustDesk.
 Os avisos de autoria do upstream e a licenca acompanham o pacote em arquivos.
 
+As cores seguem `over-design/packages/theme/theme.css`: vermelho da marca
+`#C72826` em botoes e destaques, `#F26B66` para textos e selecoes no tema
+escuro, e superficies neutras claras/escuras. O indicador de conexao e os
+estados de sucesso, aviso e erro mantem suas funcoes. O script passa
+`--dart-define=OVERDESK=true` ao Flutter nos dois modos de compilacao;
+sem essa definicao, os tokens e temas originais continuam em uso.
+
 O servidor continua sendo o RustDesk Server OSS. Nao ha API de contas:
 o perfil desativa registro na API e nao usa `apiServer` do JSON do RdGen.
 As portas nativas padrao sao 21115/TCP, 21116/TCP+UDP e 21117/TCP.
@@ -102,6 +109,13 @@ controles de rede em Geral > Outro no OverDesk. `flutter/lib/common.dart` muda
 a autoria nas telas principal e mobile apenas no OverDesk, preservando o texto
 e link originais nos demais clientes. `src/overdesk.rs` fixa as permissoes e a
 rede e limpa proxy salvo, necessario porque a aba foi removida.
+O tema opcional em `flutter/lib/common/overdesk_theme.dart` e aplicado por
+`common.dart`; seus tokens tambem atendem as janelas de sessao e arquivos.
+As cores desenhadas diretamente em `desktop_home_page.dart`,
+`desktop_setting_page.dart`, `tabbar_widget.dart` e `update_progress.dart`
+recebem a mesma paleta. Cada caminho preserva as cores anteriores sem
+`OVERDESK=true`. `res/overdesk/build.ps1` passa essa definicao nos dois modos
+e executa os passos Flutter/copia do helper que antes delegava a `build.py`.
 `libs/portable/Cargo.toml`, `build.rs` e `src/ui.rs` habilitam os recursos visuais
 do empacotador somente com sua feature `overdesk`. O fluxo de extracao original
 nao foi alterado. Nenhum protocolo,

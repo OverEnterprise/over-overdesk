@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hbb/common.dart';
+import 'package:flutter_hbb/common/overdesk_theme.dart';
 import 'package:flutter_hbb/common/widgets/audio_input.dart';
 import 'package:flutter_hbb/common/widgets/setting_widgets.dart';
 import 'package:flutter_hbb/consts.dart';
@@ -355,6 +356,9 @@ class _DesktopSettingPageState extends State<DesktopSettingPage>
   Widget _listItem({required _TabInfo tab}) {
     return Obx(() {
       bool selected = tab.key == selectedTab.value;
+      final accent = OverDeskTheme.enabled
+          ? Theme.of(context).colorScheme.primary
+          : _accentColor;
       return SizedBox(
         width: _kTabWidth,
         height: _kTabHeight,
@@ -373,17 +377,17 @@ class _DesktopSettingPageState extends State<DesktopSettingPage>
             Container(
               width: 4,
               height: _kTabHeight * 0.7,
-              color: selected ? _accentColor : null,
+              color: selected ? accent : null,
             ),
             Icon(
               selected ? tab.selected : tab.unselected,
-              color: selected ? _accentColor : null,
+              color: selected ? accent : null,
               size: 20,
             ).marginOnly(left: 13, right: 10),
             Text(
               translate(tab.label),
               style: TextStyle(
-                  color: selected ? _accentColor : null,
+                  color: selected ? accent : null,
                   fontWeight: FontWeight.w400,
                   fontSize: _kContentFontSize),
             ),

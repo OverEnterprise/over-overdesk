@@ -6,6 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hbb/common.dart';
+import 'package:flutter_hbb/common/overdesk_theme.dart';
 import 'package:flutter_hbb/common/widgets/animated_rotation_widget.dart';
 import 'package:flutter_hbb/common/widgets/custom_password.dart';
 import 'package:flutter_hbb/consts.dart';
@@ -612,8 +613,12 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [
-                  Color.fromARGB(255, 226, 66, 188),
-                  Color.fromARGB(255, 244, 114, 124),
+                  OverDeskTheme.enabled
+                      ? OverDeskTheme.brand
+                      : Color.fromARGB(255, 226, 66, 188),
+                  OverDeskTheme.enabled
+                      ? OverDeskTheme.brand
+                      : Color.fromARGB(255, 244, 114, 124),
                 ],
               )),
               padding: EdgeInsets.all(20),

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hbb/common.dart';
+import 'package:flutter_hbb/common/overdesk_theme.dart';
 import 'package:flutter_hbb/models/platform_model.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -298,7 +299,9 @@ class UpdateProgressState extends State<UpdateProgress> {
       minHeight: 20,
       borderRadius: BorderRadius.circular(5),
       backgroundColor: Colors.grey[300],
-      valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+      valueColor: AlwaysStoppedAnimation<Color>(OverDeskTheme.enabled
+          ? Theme.of(context).colorScheme.primary
+          : Colors.blue),
     );
   }
 }
