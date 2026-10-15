@@ -29,6 +29,7 @@ import 'package:window_manager/window_manager.dart';
 import 'package:window_size/window_size.dart' as window_size;
 
 import '../consts.dart';
+import 'common/overdesk_theme.dart';
 import 'common/widgets/overlay.dart';
 import 'mobile/pages/file_manager_page.dart';
 import 'mobile/pages/remote_page.dart';
@@ -249,16 +250,22 @@ class MyTheme {
   MyTheme._();
 
   static const Color grayBg = Color(0xFFEFEFF2);
-  static const Color accent = Color(0xFF0071FF);
-  static const Color accent50 = Color(0x770071FF);
-  static const Color accent80 = Color(0xAA0071FF);
+  static const Color accent =
+      OverDeskTheme.enabled ? OverDeskTheme.brand : Color(0xFF0071FF);
+  static const Color accent50 = OverDeskTheme.enabled
+      ? Color(0x77C72826)
+      : Color(0x770071FF);
+  static const Color accent80 =
+      OverDeskTheme.enabled ? OverDeskTheme.brand : Color(0xAA0071FF);
   static const Color canvasColor = Color(0xFF212121);
   static const Color border = Color(0xFFCCCCCC);
-  static const Color idColor = Color(0xFF00B6F0);
+  static const Color idColor =
+      OverDeskTheme.enabled ? OverDeskTheme.brand : Color(0xFF00B6F0);
   static const Color darkGray = Color.fromARGB(255, 148, 148, 148);
   static const Color cmIdColor = Color(0xFF21790B);
   static const Color dark = Colors.black87;
-  static const Color button = Color(0xFF2C8CFF);
+  static const Color button =
+      OverDeskTheme.enabled ? OverDeskTheme.brand : Color(0xFF2C8CFF);
   static const Color hoverBorder = Color(0xFF999999);
 
   // ListTile
@@ -369,7 +376,7 @@ class MyTheme {
     }),
   );
 
-  static ThemeData lightTheme = ThemeData(
+  static ThemeData lightTheme = OverDeskTheme.apply(ThemeData(
     // https://stackoverflow.com/questions/77537315/after-upgrading-to-flutter-3-16-the-app-bar-background-color-button-size-and
     useMaterial3: false,
     brightness: Brightness.light,
@@ -467,8 +474,8 @@ class MyTheme {
       ColorThemeExtension.light,
       TabbarTheme.light,
     ],
-  );
-  static ThemeData darkTheme = ThemeData(
+  ));
+  static ThemeData darkTheme = OverDeskTheme.apply(ThemeData(
     useMaterial3: false,
     brightness: Brightness.dark,
     hoverColor: Color.fromARGB(255, 45, 46, 53),
@@ -574,7 +581,7 @@ class MyTheme {
       ColorThemeExtension.dark,
       TabbarTheme.dark,
     ],
-  );
+  ));
 
   static ThemeMode getThemeModePreference() {
     return themeModeFromString(bind.mainGetLocalOption(key: kCommConfKeyTheme));
@@ -1149,8 +1156,10 @@ Widget createDialogContent(String text) {
     }
     spans.add(TextSpan(
       text: match.group(0) ?? '',
-      style: const TextStyle(
-        color: Colors.blue,
+      style: TextStyle(
+        color: OverDeskTheme.enabled
+            ? Get.theme.colorScheme.primary
+            : Colors.blue,
         decoration: TextDecoration.underline,
       ),
       recognizer: TapGestureRecognizer()
@@ -1321,7 +1330,7 @@ Color? _msgboxColor(String type) {
   if (type.contains("error") || type == "re-input-password") {
     return Color(0xFFE04F5F);
   }
-  return Color(0xFF2C8CFF);
+  return OverDeskTheme.enabled ? OverDeskTheme.brand : Color(0xFF2C8CFF);
 }
 
 Widget msgboxIcon(String type) {
@@ -3733,6 +3742,16 @@ Color? disabledTextColor(BuildContext context, bool enabled) {
 Widget loadPowered(BuildContext context) {
   if (bind.mainGetBuildinOption(key: "hide-powered-by-me") == 'Y') {
     return SizedBox.shrink();
+  }
+  if (bind.mainGetAppNameSync() == 'OverDesk') {
+    return Opacity(
+      opacity: 0.5,
+      child: Text(
+        'Desenvolvido por Over Enterprise LTDA.',
+        overflow: TextOverflow.clip,
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 9),
+      ),
+    ).marginOnly(top: 6);
   }
   return MouseRegion(
     cursor: SystemMouseCursors.click,

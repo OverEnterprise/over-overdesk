@@ -3,7 +3,18 @@ fn main() {
     {
         use std::io::Write;
         let mut res = winres::WindowsResource::new();
-        res.set_icon("../../res/icon.ico")
+        #[cfg(feature = "overdesk")]
+        res.set("ProductName", "OverDesk")
+            .set("FileDescription", "OverDesk")
+            .set("OriginalFilename", "OverDesk.exe")
+            .set("CompanyName", "Over Enterprise LTDA.")
+            .set("LegalCopyright", "Copyright © 2026 Over Enterprise LTDA.");
+        let icon = if cfg!(feature = "overdesk") {
+            "../../res/overdesk/icon.ico"
+        } else {
+            "../../res/icon.ico"
+        };
+        res.set_icon(icon)
             .set_language(winapi::um::winnt::MAKELANGID(
                 winapi::um::winnt::LANG_ENGLISH,
                 winapi::um::winnt::SUBLANG_ENGLISH_US,

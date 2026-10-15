@@ -2142,6 +2142,12 @@ pub fn prepare_custom_client_update() -> ResultType<bool> {
     Ok(true)
 }
 
+#[cfg(feature = "overdesk")]
+pub fn get_license_from_exe_name() -> ResultType<CustomServer> {
+    Ok(crate::overdesk::custom_server())
+}
+
+#[cfg(not(feature = "overdesk"))]
 pub fn get_license_from_exe_name() -> ResultType<CustomServer> {
     let mut exe = std::env::current_exe()?.to_str().unwrap_or("").to_owned();
     // if defined portable appname entry, replace original executable name with it.

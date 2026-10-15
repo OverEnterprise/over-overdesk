@@ -3,7 +3,10 @@ use nwg::NativeUi;
 use std::cell::RefCell;
 
 const GIF_DATA: &[u8] = include_bytes!("./res/spin.gif");
+#[cfg(not(feature = "overdesk"))]
 const LABEL_DATA: &[u8] = include_bytes!("./res/label.png");
+#[cfg(feature = "overdesk")]
+const LABEL_DATA: &[u8] = include_bytes!("../../../res/overdesk/portable-label.png");
 const GIF_SIZE: i32 = 32;
 const BG_COLOR: [u8; 3] = [90, 90, 120];
 const BORDER_COLOR: [u8; 3] = [40, 40, 40];

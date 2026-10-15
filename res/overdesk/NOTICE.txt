@@ -1,0 +1,9 @@
+OverDesk
+Copyright © 2026 Over Enterprise LTDA.
+
+Derived from RustDesk.
+Copyright © 2026 Purslane Tech Pte. Ltd.
+Licensed under the GNU Affero General Public License, version 3.
+See LICENSE-RustDesk.txt for the license text.
+
+Corresponding source: https://github.com/OverEnterprise/over-overdesk/tree/codex/overdesk
